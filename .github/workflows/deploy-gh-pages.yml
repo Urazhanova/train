@@ -3,7 +3,7 @@ name: Deploy Frontend to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - site
   workflow_dispatch:
     inputs:
       backend_url:
