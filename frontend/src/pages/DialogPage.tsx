@@ -7,7 +7,8 @@ import { Loading } from '../components/Loading';
 
 interface DialogPageProps {
   conversationHistory: Message[];
-  isLoading: boolean;
+  isWaitingForBackend: boolean;
+  showTypingIndicator: boolean;
   onSendMessage: (message: string) => void;
   onFinish: () => void;
   characterInfo?: {
@@ -24,7 +25,8 @@ interface DialogPageProps {
 
 export const DialogPage: React.FC<DialogPageProps> = ({
   conversationHistory,
-  isLoading,
+  isWaitingForBackend,
+  showTypingIndicator,
   onSendMessage,
   onFinish,
   characterInfo,
@@ -124,7 +126,7 @@ export const DialogPage: React.FC<DialogPageProps> = ({
         {conversationHistory.map((msg, idx) => (
           <MessageBubble key={idx} content={msg.content} sender={msg.role} />
         ))}
-        {isLoading && <TypingIndicator />}
+        {showTypingIndicator && <TypingIndicator />}
         <div ref={messagesEndRef} />
       </div>
 
@@ -136,19 +138,19 @@ export const DialogPage: React.FC<DialogPageProps> = ({
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Напишите ваш ответ..."
-            disabled={isLoading}
+            disabled={isWaitingForBackend}
             rows={3}
           />
           <div className="button-group">
             <button
               className="send-button"
               onClick={handleSend}
-              disabled={isLoading || !inputValue.trim()}
+              disabled={isWaitingForBackend || !inputValue.trim()}
             >
-              {isLoading ? 'Отправка...' : 'Отправить'}
+              {isWaitingForBackend ? 'Отправка...' : 'Отправить'}
             </button>
             {canFinish && (
-              <button className="finish-button" onClick={onFinish} disabled={isLoading}>
+              <button className="finish-button" onClick={onFinish} disabled={isWaitingForBackend || showTypingIndicator}>
                 Завершить и получить оценку
               </button>
             )}

@@ -10,7 +10,9 @@ export const TrainerPage: React.FC = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState<PageType>('loading');
   const [conversationHistory, setConversationHistory] = useState<Message[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isWaitingForBackend, setIsWaitingForBackend] = useState(false);
+  const [showTypingIndicator, setShowTypingIndicator] = useState(false);
+  const [isEvaluating, setIsEvaluating] = useState(false);
   const [feedback, setFeedback] = useState<FeedbackResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [scenarioData, setScenarioData] = useState<any>(null);
@@ -49,26 +51,38 @@ export const TrainerPage: React.FC = () => {
   }, []);
 
   const handleSendMessage = async (message: string) => {
-    setIsLoading(true);
     setError(null);
 
     try {
-      // Send message to backend - it will add both user and assistant messages to history
-      const response = await apiService.sendMessage(message, conversationHistory);
+      // Step 1: Add user message to history and show it immediately
+      const updatedHistoryWithUserMessage: Message[] = [
+        ...conversationHistory,
+        { role: 'user', content: message }
+      ];
+      setConversationHistory(updatedHistoryWithUserMessage);
 
-      // Add 2 second delay before showing Darina's response to simulate typing
+      // Step 2: Send request to backend
+      setIsWaitingForBackend(true);
+      const response = await apiService.sendMessage(message, updatedHistoryWithUserMessage);
+      setIsWaitingForBackend(false);
+
+      // Step 3: Show typing indicator for 2 seconds
+      setShowTypingIndicator(true);
+
+      // Step 4: After 2 seconds, show Darina's response
       setTimeout(() => {
         setConversationHistory(response.conversation_history);
-        setIsLoading(false);
+        setShowTypingIndicator(false);
       }, 2000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ошибка при отправке сообщения');
-      setIsLoading(false);
+      setIsWaitingForBackend(false);
+      setShowTypingIndicator(false);
     }
   };
 
   const handleFinish = async () => {
-    setIsLoading(true);
+    setIsEvaluating(true);
     setError(null);
 
     try {
@@ -78,7 +92,7 @@ export const TrainerPage: React.FC = () => {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ошибка при оценке диалога');
     } finally {
-      setIsLoading(false);
+      setIsEvaluating(false);
     }
   };
 
@@ -86,6 +100,9 @@ export const TrainerPage: React.FC = () => {
     setConversationHistory([]);
     setFeedback(null);
     setError(null);
+    setIsWaitingForBackend(false);
+    setShowTypingIndicator(false);
+    setIsEvaluating(false);
     setPage('loading');
     window.location.reload();
   };
@@ -115,7 +132,8 @@ export const TrainerPage: React.FC = () => {
     return (
       <DialogPage
         conversationHistory={conversationHistory}
-        isLoading={isLoading}
+        isWaitingForBackend={isWaitingForBackend}
+        showTypingIndicator={showTypingIndicator}
         onSendMessage={handleSendMessage}
         onFinish={handleFinish}
         characterInfo={scenarioData?.character_info}
