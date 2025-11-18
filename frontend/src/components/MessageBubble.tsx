@@ -11,7 +11,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ content, sender })
   return (
     <div className={`message-bubble ${isManager ? 'manager' : 'employee'}`}>
       <div className="message-header">
-        {isManager ? '👔 Руководитель' : '👤 Вы'}
+        {isManager ? '👩‍💼 Дарина' : '👤 Вы'}
       </div>
       <p className="message-content">{content}</p>
     </div>
