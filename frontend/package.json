@@ -2,6 +2,7 @@
   "name": "feedback-trainer-frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://urazhanova.github.io/train/",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -18,7 +19,9 @@
     "build:dev": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "npm run start:dev"
+    "dev": "npm run start:dev",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
