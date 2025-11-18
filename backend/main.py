@@ -4,8 +4,8 @@ from pydantic import BaseModel
 from typing import List
 import os
 from dotenv import load_dotenv
-from services.groq_service import GroqService
-from services.evaluator import FeedbackEvaluator
+from backend.services.groq_service import GroqService
+from backend.services.evaluator import FeedbackEvaluator
 
 load_dotenv()
 
