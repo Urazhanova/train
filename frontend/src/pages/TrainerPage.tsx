@@ -53,6 +53,7 @@ export const TrainerPage: React.FC = () => {
     setError(null);
 
     try {
+      // Send message to backend - it will add both user and assistant messages to history
       const response = await apiService.sendMessage(message, conversationHistory);
       setConversationHistory(response.conversation_history);
     } catch (err) {

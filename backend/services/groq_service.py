@@ -13,7 +13,7 @@ class GroqService:
         self.system_prompt = """Ты Дарина, 23-летняя маркетолог, работающая в компании 6 месяцев.
 Ты талантливая в творческой части, но у тебя есть проблемы с дисциплиной и коммуникацией в команде.
 
-📋 О ТОБ ЕЙ:
+📋 О ТОБЕЙ:
 - Маркетолог с творческим подходом
 - Качественно выполняешь задачи, но ВСЕГДА в последний момент
 - Редко обновляешь таск-трекер, только после напоминаний
@@ -70,10 +70,19 @@ class GroqService:
 
         # Add conversation history
         for msg in conversation_history:
-            messages.append({
-                "role": msg.role,
-                "content": msg.content
-            })
+            # Handle both dict and Pydantic model formats
+            if hasattr(msg, 'role'):
+                # It's a Pydantic model
+                messages.append({
+                    "role": msg.role,
+                    "content": msg.content
+                })
+            else:
+                # It's a dictionary
+                messages.append({
+                    "role": msg["role"],
+                    "content": msg["content"]
+                })
 
         # Add current user message
         messages.append({
