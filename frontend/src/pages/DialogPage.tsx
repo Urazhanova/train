@@ -8,6 +8,16 @@ interface DialogPageProps {
   isLoading: boolean;
   onSendMessage: (message: string) => void;
   onFinish: () => void;
+  characterInfo?: {
+    name: string;
+    age: number;
+    position: string;
+    tenure: string;
+    strengths: string;
+    challenges: string;
+  };
+  situation?: string;
+  initialMessage?: string;
 }
 
 export const DialogPage: React.FC<DialogPageProps> = ({
@@ -15,6 +25,9 @@ export const DialogPage: React.FC<DialogPageProps> = ({
   isLoading,
   onSendMessage,
   onFinish,
+  characterInfo,
+  situation,
+  initialMessage,
 }) => {
   const [inputValue, setInputValue] = React.useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -49,11 +62,53 @@ export const DialogPage: React.FC<DialogPageProps> = ({
     <div className="dialog-page">
       <div className="dialog-header">
         <h1>Тренажер обратной связи</h1>
-        <p>Диалог с руководителем</p>
+        <p>Практикуйте навыки обратной связи с сотрудником</p>
         <div className="message-counter">
           Ваши ответы: {messageCount}/{maxMessages}
         </div>
       </div>
+
+      {characterInfo && (
+        <div className="character-info-section">
+          <div className="character-card">
+            <div className="character-header">
+              <h2>👩‍💼 {characterInfo.name}</h2>
+              <p className="character-subtitle">{characterInfo.age} лет • {characterInfo.position}</p>
+            </div>
+
+            <div className="character-details">
+              <div className="detail-item">
+                <span className="label">В компании:</span>
+                <span className="value">{characterInfo.tenure}</span>
+              </div>
+              <div className="detail-item">
+                <span className="label">Сильные стороны:</span>
+                <span className="value">{characterInfo.strengths}</span>
+              </div>
+              <div className="detail-item">
+                <span className="label">Вызовы:</span>
+                <span className="value">{characterInfo.challenges}</span>
+              </div>
+            </div>
+
+            {situation && (
+              <div className="situation-text">
+                {situation.split('\n').map((line, idx) => (
+                  <p key={idx}>{line}</p>
+                ))}
+              </div>
+            )}
+
+            {initialMessage && (
+              <div className="initial-message-hint">
+                <p className="hint-label">💬 Начните разговор, дав Дарине обратную связь:</p>
+                <p className="hint-text">"{initialMessage}"</p>
+                <p className="hint-note">Или сформулируйте свой вариант для открытия диалога...</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       <div className="messages-container">
         {conversationHistory.map((msg, idx) => (

@@ -105,13 +105,8 @@ async def evaluate_conversation(request: FeedbackRequest):
 @app.get("/api/init-scenario")
 async def init_scenario():
     """Initialize a new feedback scenario"""
-    initial_message = groq_service.get_initial_scenario()
-    return {
-        "initial_message": initial_message,
-        "conversation_history": [
-            {"role": "assistant", "content": initial_message}
-        ]
-    }
+    scenario = groq_service.get_initial_scenario()
+    return scenario
 
 
 if __name__ == "__main__":

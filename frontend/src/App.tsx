@@ -11,6 +11,7 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [feedback, setFeedback] = useState<FeedbackResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [scenarioData, setScenarioData] = useState<any>(null);
 
   // Initialize the app
   useEffect(() => {
@@ -25,7 +26,8 @@ const App: React.FC = () => {
 
         // Initialize the scenario
         const scenario = await apiService.initDialog();
-        setConversationHistory(scenario.conversation_history);
+        setScenarioData(scenario);
+        setConversationHistory(scenario.conversation_history || []);
         setPage('dialog');
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Ошибка инициализации');
@@ -94,6 +96,9 @@ const App: React.FC = () => {
         isLoading={isLoading}
         onSendMessage={handleSendMessage}
         onFinish={handleFinish}
+        characterInfo={scenarioData?.character_info}
+        situation={scenarioData?.situation}
+        initialMessage={scenarioData?.initial_message}
       />
     );
   }
