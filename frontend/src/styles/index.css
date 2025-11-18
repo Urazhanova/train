@@ -14,7 +14,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   color: #333;
 }
@@ -104,6 +103,14 @@ body {
 .error-page button:hover {
   background: #f0f0f0;
   transform: scale(1.05);
+}
+
+/* ============================================
+   TRAINER PAGE BACKGROUND
+   ============================================ */
+
+body.trainer-page {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 /* ============================================
