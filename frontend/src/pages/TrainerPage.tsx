@@ -12,7 +12,6 @@ export const TrainerPage: React.FC = () => {
   const [conversationHistory, setConversationHistory] = useState<Message[]>([]);
   const [isWaitingForBackend, setIsWaitingForBackend] = useState(false);
   const [showTypingIndicator, setShowTypingIndicator] = useState(false);
-  const [isEvaluating, setIsEvaluating] = useState(false);
   const [feedback, setFeedback] = useState<FeedbackResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [scenarioData, setScenarioData] = useState<any>(null);
@@ -82,7 +81,6 @@ export const TrainerPage: React.FC = () => {
   };
 
   const handleFinish = async () => {
-    setIsEvaluating(true);
     setError(null);
 
     try {
@@ -91,8 +89,6 @@ export const TrainerPage: React.FC = () => {
       setPage('feedback');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ошибка при оценке диалога');
-    } finally {
-      setIsEvaluating(false);
     }
   };
 
@@ -102,7 +98,6 @@ export const TrainerPage: React.FC = () => {
     setError(null);
     setIsWaitingForBackend(false);
     setShowTypingIndicator(false);
-    setIsEvaluating(false);
     setPage('loading');
     window.location.reload();
   };

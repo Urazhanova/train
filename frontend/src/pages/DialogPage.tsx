@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Message } from '../types';
 import { MessageBubble } from '../components/MessageBubble';
 import { TypingIndicator } from '../components/TypingIndicator';
-import { Loading } from '../components/Loading';
 
 interface DialogPageProps {
   conversationHistory: Message[];
