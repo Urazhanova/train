@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Message } from '../types';
 import { MessageBubble } from '../components/MessageBubble';
+import { TypingIndicator } from '../components/TypingIndicator';
 import { Loading } from '../components/Loading';
 
 interface DialogPageProps {
@@ -123,7 +124,7 @@ export const DialogPage: React.FC<DialogPageProps> = ({
         {conversationHistory.map((msg, idx) => (
           <MessageBubble key={idx} content={msg.content} sender={msg.role} />
         ))}
-        {isLoading && <Loading />}
+        {isLoading && <TypingIndicator />}
         <div ref={messagesEndRef} />
       </div>
 

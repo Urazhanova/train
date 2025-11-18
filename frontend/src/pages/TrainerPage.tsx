@@ -55,10 +55,14 @@ export const TrainerPage: React.FC = () => {
     try {
       // Send message to backend - it will add both user and assistant messages to history
       const response = await apiService.sendMessage(message, conversationHistory);
-      setConversationHistory(response.conversation_history);
+
+      // Add 2 second delay before showing Darina's response to simulate typing
+      setTimeout(() => {
+        setConversationHistory(response.conversation_history);
+        setIsLoading(false);
+      }, 2000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ошибка при отправке сообщения');
-    } finally {
       setIsLoading(false);
     }
   };
