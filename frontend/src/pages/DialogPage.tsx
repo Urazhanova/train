@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Message } from '../types';
 import { MessageBubble } from '../components/MessageBubble';
 import { Loading } from '../components/Loading';
@@ -29,6 +30,7 @@ export const DialogPage: React.FC<DialogPageProps> = ({
   situation,
   initialMessage,
 }) => {
+  const navigate = useNavigate();
   const [inputValue, setInputValue] = React.useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -61,8 +63,15 @@ export const DialogPage: React.FC<DialogPageProps> = ({
   return (
     <div className="dialog-page">
       <div className="dialog-header">
-        <h1>Тренажер обратной связи</h1>
-        <p>Практикуйте навыки обратной связи с сотрудником</p>
+        <div className="header-top">
+          <div>
+            <h1>Тренажер обратной связи</h1>
+            <p>Практикуйте навыки обратной связи с сотрудником</p>
+          </div>
+          <button className="back-button" onClick={() => navigate('/')}>
+            ← На главную
+          </button>
+        </div>
         <div className="message-counter">
           Ваши ответы: {messageCount}/{maxMessages}
         </div>
