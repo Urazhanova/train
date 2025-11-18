@@ -27,10 +27,10 @@ jobs:
         working-directory: ./frontend
         run: npm install
 
-      - name: Build with Railway backend
+      - name: Build with Render backend
         working-directory: ./frontend
         env:
-          REACT_APP_API_URL: ${{ secrets.RAILWAY_BACKEND_URL || 'http://localhost:8888' }}
+          REACT_APP_API_URL: https://train-1-n4x7.onrender.com
         run: npm run build
 
       - name: Deploy to GitHub Pages
