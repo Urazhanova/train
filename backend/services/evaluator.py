@@ -9,7 +9,7 @@ class FeedbackEvaluator:
 
     def __init__(self):
         self.client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-        self.model = "mixtral-8x7b-32768"
+        self.model = "llama-3.3-70b-versatile"
 
     def evaluate(self, conversation_history: List[Dict[str, str]]) -> Dict[str, Any]:
         """Evaluate the entire conversation"""
@@ -91,8 +91,11 @@ class FeedbackEvaluator:
         """Convert conversation history to formatted text"""
         text = ""
         for msg in conversation_history:
-            role = "Руководитель:" if msg["role"] == "assistant" else "Сотрудник:"
-            text += f"\n{role}\n{msg['content']}\n"
+            # Handle both Pydantic objects and dicts
+            role_val = msg.role if hasattr(msg, 'role') else msg["role"]
+            content_val = msg.content if hasattr(msg, 'content') else msg['content']
+            role = "Руководитель:" if role_val == "assistant" else "Сотрудник:"
+            text += f"\n{role}\n{content_val}\n"
         return text
 
     def _create_default_evaluation(self) -> Dict[str, Any]:
