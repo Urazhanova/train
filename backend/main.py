@@ -72,21 +72,20 @@ async def chat(request: DialogRequest):
         )
 
         # Update conversation history
-        new_history = request.conversation_history + [
-            {"role": "user", "content": request.user_message},
-            {"role": "assistant", "content": assistant_response}
-        ]
+        new_history = request.conversation_history.copy()
+        new_history.append(Message(role="user", content=request.user_message))
+        new_history.append(Message(role="assistant", content=assistant_response))
 
         return DialogResponse(
             assistant_message=assistant_response,
             conversation_history=new_history
         )
     except Exception as e:
-        return {
-            "error": str(e),
-            "assistant_message": "Извините, произошла ошибка. Попробуйте ещё раз.",
-            "conversation_history": request.conversation_history
-        }
+        print(f"Dialog endpoint error: {str(e)}")
+        return DialogResponse(
+            assistant_message="Извините, произошла ошибка. Попробуйте ещё раз.",
+            conversation_history=request.conversation_history
+        )
 
 
 @app.post("/api/evaluate", response_model=FeedbackResponse)
