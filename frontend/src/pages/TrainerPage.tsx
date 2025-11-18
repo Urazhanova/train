@@ -61,9 +61,9 @@ export const TrainerPage: React.FC = () => {
       ];
       setConversationHistory(updatedHistoryWithUserMessage);
 
-      // Step 2: Send request to backend
+      // Step 2: Send request to backend (send original history, backend will add user message)
       setIsWaitingForBackend(true);
-      const response = await apiService.sendMessage(message, updatedHistoryWithUserMessage);
+      const response = await apiService.sendMessage(message, conversationHistory);
       setIsWaitingForBackend(false);
 
       // Step 3: Show typing indicator for 2 seconds
