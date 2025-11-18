@@ -7,7 +7,7 @@ class GroqService:
 
     def __init__(self, api_key: str):
         self.client = Groq(api_key=api_key)
-        self.model = "mixtral-8x7b-32768"
+        self.model = "llama-3.3-70b-versatile"
 
         # System prompt for the manager feedback scenario
         self.system_prompt = """Ты опытный руководитель, который даёт конструктивную обратную связь своему сотруднику.
@@ -41,8 +41,8 @@ class GroqService:
         # Add conversation history
         for msg in conversation_history:
             messages.append({
-                "role": msg["role"],
-                "content": msg["content"]
+                "role": msg.role,
+                "content": msg.content
             })
 
         # Add current user message
@@ -52,10 +52,15 @@ class GroqService:
         })
 
         try:
+            # Add system prompt as first message
+            messages.insert(0, {
+                "role": "system",
+                "content": self.system_prompt
+            })
+
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=messages,
-                system=self.system_prompt,
                 temperature=0.7,
                 max_tokens=300,
             )
